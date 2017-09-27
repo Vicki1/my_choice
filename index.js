@@ -22,7 +22,23 @@ app.use(session({
 
 massive(connectionString).then(db=>{
     app.set('db',db);
+
+    db.create_users_table().then(res=>{
+        res.status(200).send(res)
+    }).catch(err=>console.log(err))
+
+    db.create_video_table().then(res=>{
+        res.status(200).send(res)
+    }).catch(err=>console.log(err))
 })
+
+app.get('/isbworking', function (req,res,next){
+    req.app.get('db').create_collection().then(res=>{
+        res.status(200).send(res)
+    })
+})
+
+app.post('/')
 
 
 var port=3000
