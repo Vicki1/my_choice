@@ -18,8 +18,10 @@
     "react-dom": "^15.6.2",
     "react-if": "^2.2.1",
     "react-iframe": "^1.0.7",
+    "react-redux": "^5.0.6",
     "react-redux-oauth2": "^0.5.6",
     "react-scripts": "1.0.13",
+    "redux": "^3.7.2",
     "request": "^2.82.0",
     "xtend": "^4.0.1",
     "youtube-api-search": "0.0.5"

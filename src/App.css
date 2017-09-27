@@ -26,11 +26,11 @@
 .input{
   background: lightgrey;
 }
-.modal-container {
+
+
+.youtube_save_modal{
   position: relative;
-}
-.modal-container .modal, .modal-container .modal-backdrop {
-  position: absolute;
+  background: lightgrey;
 }
 
 
