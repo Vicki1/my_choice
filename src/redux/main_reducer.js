@@ -1,13 +1,22 @@
 
 import {SAVE_VIDEO} from './actions.js'
 
+
 export default function mainReducer(state,action){
+   
     switch(action.type){
         case SAVE_VIDEO :
-            return console.log('reducer received',action.payload.collection,action.payload.videoId);
+            
+             var newObject={ collection: action.payload.collection,
+                                videoId: action.payload.videoId,
+                                description:'MyNote:'
+                            }
+            var newCollection=[...state.savedVideos,newObject];
+            
+            return Object.assign({},state,{savedVideos:newCollection});
+
 
           default:
-        console.log('no videos added')
         return state;
     }
  

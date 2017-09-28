@@ -12,7 +12,7 @@ export default class SeachBar extends Component{
 
 
     render(){
-       console.log(this.state.searchTerm)
+      
         return(
             
             <input className='input' value={this.state.term} onChange={event=>this.changeSearchTerm(event.target.value)}/>

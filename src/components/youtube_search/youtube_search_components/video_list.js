@@ -11,14 +11,14 @@ import {saveVideo} from '../../../redux/actions.js'
 
         this.state={
             VideoList:[],
-            collectionList: ['WEIGHTS','running','puppies']
-           
+            collectionList: ['running','puppies']
+            
         }
     this.saveToCollection=this.saveToCollection.bind(this);
     }
  
  saveToCollection(collection,videoId){
-     console.log('saveToCollection recieved input', collection, videoId)
+     
     this.props.dispatch(saveVideo(collection,videoId))
           
      
@@ -31,7 +31,7 @@ import {saveVideo} from '../../../redux/actions.js'
           
           const collections=this.state.collectionList
           const collectionButtons=collections.map((collection)=>{return <button key={collection} onClick={()=>this.saveToCollection(collection,this.props.video.id.videoId)}>{collection}</button>})
-          console.log(this.props.heydoesitwork,'hey im getting state back from store')
+          
         return(
            <div className='youtTubeVideoDisplay'>
                     <br/>
@@ -41,7 +41,7 @@ import {saveVideo} from '../../../redux/actions.js'
                     position="relative"
                     allowFullScreen/>
                     <br/>
-                    <DropdownButton className='modal-container' title="Save To" id={`id_${this.props.video.id.videoId}`} onClick={()=>console.log(this.props.video.id.videoId)}>
+                    <DropdownButton className='modal-container' title="Save To" id={`id_${this.props.video.id.videoId}`}>
                             {collectionButtons}
                             <button>Create New Collection</button>
                     </DropdownButton>
@@ -54,7 +54,7 @@ import {saveVideo} from '../../../redux/actions.js'
 }
 
 function mapStateToProps(state){
-    console.log(state);
+   
     return{
         heydoesitwork: state
     }
