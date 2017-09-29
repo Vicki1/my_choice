@@ -2,7 +2,7 @@ import React,{Component} from 'react';
 import Iframe from 'react-iframe';
 import {DropdownButton} from 'react-bootstrap';
 import {connect} from 'react-redux';
-import {saveVideo} from '../../../redux/actions.js'
+import {saveVideo} from '../../../redux/main_reducer.js';
 
 
  class VideoItem extends Component{
@@ -19,7 +19,7 @@ import {saveVideo} from '../../../redux/actions.js'
  
  saveToCollection(collection,videoId){
      
-    this.props.dispatch(saveVideo(collection,videoId))
+    this.props.dispatch(saveVideo(this.props.userId,collection,videoId,'this is my new video description!!'))
           
      
           
@@ -56,7 +56,8 @@ import {saveVideo} from '../../../redux/actions.js'
 function mapStateToProps(state){
    
     return{
-        heydoesitwork: state
+        heydoesitwork: state,
+        userId : state.userId
     }
 }
 

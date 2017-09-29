@@ -1,4 +1,4 @@
-export const SAVE_VIDEO= 'SAVE_VIDEO'
+/*export const SAVE_VIDEO= 'SAVE_VIDEO'
 
 export function saveVideo(collection,videoId){
     return{
@@ -8,4 +8,4 @@ export function saveVideo(collection,videoId){
                 videoId: videoId
               }
     }
-}
+}*/

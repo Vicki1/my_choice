@@ -23,14 +23,21 @@
   to { transform: rotate(360deg); }
 }
 
+
+
 .input{
   background: lightgrey;
 }
 
+.youTubeSearchArea{
+background: blue;
 
-.youtube_save_modal{
-  position: relative;
-  background: lightgrey;
 }
+
+.selectedCollectionArea{
+  background:green;
+  height: 200px;
+}
+
 
 
