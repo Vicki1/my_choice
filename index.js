@@ -59,48 +59,22 @@ app.post(`/api/newUser`, (req,res)=>{
  
     db.addNewUser([req.body.email,req.body.username,req.body.password])
     .then(results=>{
-        console.log('new user created')
+        console.log('new user created',results[0])
         res.status(200).send(results[0])})
     .catch(err=>console.log(err,' could not add new user see server endpoint'))
 })
 
-app.get(`api/login`, (req,res)=>{
-    //let db= req.app.get('db')
-
+app.post(`/api/login`, (req,res)=>{
+    let db= req.app.get('db')
+  console.log(req.body)
     db.checkLoginInfo([req.body.emailTryingToLogin,req.body.passwordTryingToLogin])
     .then(results=>{
-        rest.status(200).send({userLoggedIn: true})
-    .catch(err=>{
-          return {
-              userLoggedIn: false
-          }
-
-    })
+        console.log('login results',results[0])
+        res.status(200).send(results[0])
+    
 })
+ .catch(err=>{console.log(err)})
 })
-
-app.get('/api/getVideosByUser/:id', (req,res)=>{
-    db.getVideosByUser(req.params.id)
-    .then(results=>{res.status(200).send(results)})
-    .catch(err=>console.log(err,' could not get user videos see server endpoint'))
-})
-
-app.post('/api/addVideoToCollection/:id/:collection/:videoId/:description',(req,res)=>{
-    db.addVideoToCollection([req.params.id,req.params.collection,req.params.videoId,req.params.description])
-    .then(results=>{res.status(200).send({
-                    collection : req.params.collection,
-                    videoId: req.params.videoId,
-                    description: req.params.description
-                          })
-                        })
-    .catch(err=>console.log(err,' could not post to user videos see server endpoint'))
-})
-app.get('/isbworking', (req,res,next)=>{
-    db.create_collection().then(results=>{
-        res.status(200).send(res)
-    })
-})
-
 
 
 

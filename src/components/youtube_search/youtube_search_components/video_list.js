@@ -43,7 +43,7 @@ import {saveVideo} from '../../../redux/main_reducer.js';
                     <br/>
                     <DropdownButton className='modal-container' title="Save To" id={`id_${this.props.video.id.videoId}`}>
                             {collectionButtons}
-                            <button>Create New Collection</button>
+                            
                     </DropdownButton>
                     <br/>
                     

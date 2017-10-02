@@ -1,6 +1,5 @@
 import React,{Component} from 'react';
 import {connect} from 'react-redux';
-import {newUser} from '../../redux/main_reducer.js';
 import {loginUser} from '../../redux/main_reducer.js';
 
 class Login extends Component{

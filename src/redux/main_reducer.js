@@ -11,6 +11,8 @@ const LOGIN_USER = 'LOGIN_USER';
 var initialState= {
     userLoggedIn: '',
     username: '',
+    userId:'',
+    collections:{}
    // savedVideos : data
 }
 
@@ -30,6 +32,7 @@ export function newUser(newEmail,newUsername,newPassword){
         type: NEW_USER,
         payload: axios.post(`api/newUser`,{email:newEmail,username:newUsername,password:newPassword})
         .then((res)=>{
+            console.log(res,"axios new User data returned")
             return res.data;
         })
         .catch(err=>console.log(err,' error from newUser action creator axios request'))
@@ -41,7 +44,7 @@ export function loginUser(email,password){
     console.log (email,password,'this is what loginUser action creator takes in');
     return{
         type: LOGIN_USER,
-        payload: axios.get(`api/login`,{emailTryingToLogin: email, passwordTryingToLogin: password})
+        payload: axios.post(`api/login`,{emailTryingToLogin: email, passwordTryingToLogin: password})
         .then((res)=>{
             console.log(res.data, 'this is what loginUser axios function returned')
             return res.data;
@@ -77,8 +80,11 @@ export default function mainReducer(state=initialState,action){
 
         case NEW_USER + '_FULFILLED' :
             console.log('new user reducer ran',action)
-            return Object.assign({},state,{username: action.payload.username})
+            return Object.assign({},state,{username: action.payload.username, userId:action.payload.id});
 
+        case LOGIN_USER + '_FULFILLED':
+            console.log('loginuser reducer ran', action);
+            return Object.assign({},state,{username: action.payload.username,userId:action.payload.id});
 
           default:
         return state;

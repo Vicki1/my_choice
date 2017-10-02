@@ -10,8 +10,8 @@ import {connect} from 'react-redux';
 
 class App extends Component {
   render() {
-  
-      
+  console.log(this.props.username)
+  console.log('current state ', this.props.state)
     return (
       <div className="App">
         <div className="App-header">
@@ -35,7 +35,8 @@ class App extends Component {
 function mapStateToProps(state){
     console.log(state);
     return{
-        username: state.username
+        username: state.username,
+        state: state
     }
 }
 
