@@ -5,6 +5,7 @@ import YouTubeSearch from './components/youtube_search/youtube_search.js'
 import SelectedCollection from './components/selected_collection/selected_collection.js';
 import  Login from './components/login/login.js';
 import SignUp from './components/sign_up/sign_up';
+import Collections from './components/collections/collections.js';
 import {connect} from 'react-redux';
 
 
@@ -21,6 +22,7 @@ class App extends Component {
         <span>user:{this.props.username}</span>
         <SignUp/>
         <Login/>
+        <Collections/>
         <SelectedCollection/>
         <YouTubeSearch/>
       </div>
@@ -36,7 +38,8 @@ function mapStateToProps(state){
     console.log(state);
     return{
         username: state.username,
-        state: state
+        state: state,
+        collections: state.collections
     }
 }
 
