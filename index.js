@@ -73,7 +73,32 @@ app.post(`/api/login`, (req,res)=>{
         res.status(200).send(results[0])
     
 })
- .catch(err=>{console.log(err)})
+ .catch(err=>{console.log(err, 'see login server endpoint')})
+})
+
+app.post(`/api/getCollections`, (req,res)=>{
+    let db= req.app.get('db')
+
+    db.getCollections(req.body.id)
+    .then(results=>{
+        console.log('getCollection server results',results)
+        res.status(200).send(results)
+    
+})
+ .catch(err=>{console.log(err, 'see login server endpoint')})
+})
+
+
+
+app.post(`/api/newCollection`, (req,res)=>{
+     let db= req.app.get('db')
+     console.log(req.body, 'this is what createCollection endpoint takes in')
+     db.createCollection([req.body.userId,req.body.newCollection])
+     .then(results=>{
+         console.log('new collection resulst', results[0])
+         res.status(200).send(results[0])
+    })
+    .catch(err=>{console.log(err, 'see newCollection server endpoint')})
 })
 
 
