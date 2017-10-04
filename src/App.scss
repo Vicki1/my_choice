@@ -1,0 +1,78 @@
+$font-stack:    Helvetica, sans-serif;
+$primary-color: white;
+$myRed: red;
+
+@mixin myfont{
+  font-family: 'Anton', sans-serif;
+}
+
+@mixin button {
+color:white;
+background: red;
+border-radius: 20px;
+}
+
+.topNavBar{
+
+  border-bottom: 5px solid lightgrey;
+  padding:10px;
+  margin-bottom: 10px;
+  .username{
+    font-size: 20px;
+    @include myfont;
+  }
+}
+
+
+.loginArea{
+      text-align: center;
+  input{
+
+border-radius: 10px;
+display: flex;
+margin: auto;
+  }
+  button{
+    @include button;
+  }
+  
+}
+
+.signUpArea{
+  text-align: center;
+  input{
+        border-radius: 10px;
+        display: flex;    
+        margin: auto;
+        }
+  button{
+    @include button;
+  }
+ 
+}
+
+.collectionsList{
+
+    
+    
+    #createNewCollectionButton{
+      margin: 10px;
+      @include button;
+    }
+    .newCollectionName{
+      border: 1px solid lightgrey;
+    }
+    .SelectedCollectionArea{
+      background: black;
+    }
+
+} 
+
+.youtubeSearchInput{
+  border: 1px solid lightgrey;
+}
+
+
+
+
+
