@@ -42,3 +42,6 @@
 
 .youtubeSearchInput {
   border: 1px solid lightgrey; }
+
+.youtTubeVideoDisplay {
+  display: flex; }

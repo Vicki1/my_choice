@@ -24,6 +24,9 @@ class Collections extends Component{
             "borderRadius": "20px"
             
         }
+        
+
+        
     
        const collections=this.props.collections;
         const collectionsList=collections.map((collection,i)=><button className="collectionsDropdownChoices" onClick={()=>this.props.selectCollection(collection.id)} key={collection.id}>{collection.collection_name}</button>) 

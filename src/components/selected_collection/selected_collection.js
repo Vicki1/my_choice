@@ -2,6 +2,7 @@ import React,{Component} from "react";
 //import Iframe from 'react-iframe';
 //import ReactDOM from 'react-dom';
 //import Carousel from 'react-responsive-carousel'
+import Iframe from 'react-iframe';
 import {connect} from 'react-redux'; 
 
 class SelectedCollection extends Component{
@@ -14,7 +15,12 @@ class SelectedCollection extends Component{
     }
 
     render(){
-       
+       const selectedCollection=this.props.selectedCollection;
+       const selectedCollectionDisplay=selectedCollection.map((video,i)=><Iframe className="embed-responsive-item" url={`https://www.youtube.com/embed/${video.video_id}`}   width="400px"
+                    height="150px"
+                    display="initial"
+                    position="relative"
+                    allowFullScreen/>) 
         /*var savedVideosDisplay= function(savedVideos){
                                 console.log(savedVideos)
                                 if(savedVideos){
@@ -33,7 +39,7 @@ class SelectedCollection extends Component{
         */
              return(
             <div className='selectedCollection'>
-                 SelectedCollectionArea
+                 {selectedCollectionDisplay}
                  
             </div>
         )
@@ -42,7 +48,7 @@ class SelectedCollection extends Component{
 function mapStateToProps(state){
    
     return{
-        savedVideos: (state.savedVideos ? state.savedVideos : false )
+       selectedCollection : state.selectedCollection
     }
 }
 

@@ -34,20 +34,21 @@ import {saveVideo,getCollections} from '../../../redux/main_reducer.js';
 
         return(
            <div className='youtTubeVideoDisplay'>
-                    <br/>
+                <div className="youTubeSearchVideo">
+                    
                     <Iframe className="embed-responsive-item" url={`https://www.youtube.com/embed/${this.props.video.id.videoId}`}   width="400px"
                     height="150px"
                     display="initial"
                     position="relative"
                     allowFullScreen/>
-                    <br/>
-                    <input placeholder="Your Description ..." onChange={(event)=>this.setState(Object.assign({},this.state,{ description: event.target.value }))}/>;
+                    <br/> 
+                    <input placeholder="Your Description ..." onChange={(event)=>this.setState(Object.assign({},this.state,{ description: event.target.value }))}/>
                     <DropdownButton onClick={()=>{this.props.getCollections(this.props.userId)}} className='modal-container' title="Save To" id={`id_${this.props.video.id.videoId}`}>
                            
                             {collectionsList}
                             
                     </DropdownButton>
-                    <br/>
+                </div>
                     
                 
          </div>

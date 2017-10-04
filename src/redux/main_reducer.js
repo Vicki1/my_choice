@@ -96,9 +96,9 @@ export function selectCollection(collectionId){
     console.log(collectionId, ' this is collectionId selectCollection action creator takes in')
     return {
         type: COLLECTION_SELECTED,
-        action: axios.get(`/api/selectCollection/${collectionId}`)
+        payload: axios.get(`/api/selectCollection/${collectionId}`)
         .then((res)=>{
-            console.log(res.data, 'this is what selecCollection axios call returned')
+            console.log(res.data, 'this is what selectCollection axios call returned')
             return res.data
         })
         .catch(err=>console.log(err,' error from selectCollection axios request'))
@@ -132,8 +132,12 @@ return{
 export default function mainReducer(state=initialState,action){
    
     switch(action.type){
+        
+        case COLLECTION_SELECTED + '_FULFILLED':
+            return Object.assign({},state,{selectedCollection:action.payload})
+        
         case SAVE_VIDEO +  '_FULFILLED' :
-            return console.log('savedVideo reducer case took in ', action.payload);
+            return Object.assign({},state);
             
          case NEW_USER + '_FULFILLED' :
             
@@ -157,9 +161,7 @@ export default function mainReducer(state=initialState,action){
             var newCollectionsArray = [...state.collections, action.payload];
             return Object.assign({},state,{collections : newCollectionsArray});
 
-        case COLLECTION_SELECTED + '_FULFILLED':
-        console.log('collectionSelected reducer ran', action.payload);
-        return (Object.assign({},this.state,{selectedCollection: action.payload}));
+        
    
 
           default:

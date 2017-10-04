@@ -17,6 +17,7 @@ export default class MainPage extends Component{
             <div className="mainPageDiv">
                 <Collections/>
                 <SelectedCollection/>
+                <h2>Search YouTube Videos</h2>
                 <YouTubeSearch/>
             </div>
         )

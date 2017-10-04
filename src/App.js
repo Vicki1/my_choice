@@ -35,9 +35,9 @@ class App extends Component {
 function mapStateToProps(state){
   
     return{
-        username: state.username,
+    
         state: state,
-        collections: state.collections
+      
     }
 }
 

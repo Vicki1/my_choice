@@ -44,7 +44,7 @@ render(){
     return(
         <div className="topNavBar">
             <span className="username">MyChoice</span>
-            { this.state.loggedIn ? <span>Hi : {usr}</span> : <span> not logged in</span>}
+           
         
         </div>
     )
