@@ -11,20 +11,21 @@ import {connect} from 'react-redux';
 
 class App extends Component {
   render() {
-  console.log(this.props.username)
+
   console.log('current state ', this.props.state)
     return (
       <div className="App">
-        <div className="App-header">
-          <img src={logo} className="App-logo" alt="logo" />
-          <h2>MyChoice</h2>
-        </div>
-        <span>user:{this.props.username}</span>
-        <SignUp/>
-        <Login/>
-        <Collections/>
-        <SelectedCollection/>
-        <YouTubeSearch/>
+       
+          <SignUp/>
+          <Login/>
+          <div className="userIsLoggedIn">
+            <div className="topPart">
+              <span className="user">user:{this.props.username}</span>
+              <Collections/>
+            </div>
+              <SelectedCollection/>
+              <YouTubeSearch/>
+         </div>
       </div>
     );
   
@@ -35,7 +36,7 @@ class App extends Component {
 
 
 function mapStateToProps(state){
-    console.log(state);
+  
     return{
         username: state.username,
         state: state,

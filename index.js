@@ -1,7 +1,7 @@
 const express = require('express');
 const bodyParser = require('body-parser');
 const cors = require('cors');
-const con =require('./src/config');//allos us to get file with our URI from sql database
+const con =require('./src/config');//allows us to get file with our URI from sql database
 const herokuURI= con.herokuURI;
 const connectionString = herokuURI;
 const path=require('path');
@@ -27,7 +27,7 @@ massive({connectionString
 //^ this allows us to to db.function whatever
  
     db.createUsersTable().then(response=>{
-        console.log(response,'users table created')
+        console.log(response,'users table deleted')
     }).catch(err=>console.log(err))
 
         
@@ -101,6 +101,30 @@ app.post(`/api/newCollection`, (req,res)=>{
     .catch(err=>{console.log(err, 'see newCollection server endpoint')})
 })
 
+
+app.post(`/api/addVideoToCollection/`, (req,res)=>{
+     let db= req.app.get('db')
+     console.log(req.body, 'this is what addVideo endpoint takes in')
+     db.addVideoToCollection([req.body.videoId,req.body.collectionId,req.body.description])
+     .then(results=>{
+         console.log('new video added to collection ', results[0])
+         res.status(200).send(results[0])
+     })
+     .catch(err=>console.log(err,' see addVideoToCollection endpoint'))
+})
+
+
+app.get('/api/selectCollection/:collectionId', (req,res)=>{
+    let db= req.app.get('db')
+    console.log(req.params.collectionId, 'this is what selectedCollection endpoint is taking in')
+    db.selectCollection(req.params.collectionId)
+    .then(results=>{
+        console.log('this is data returned to selectCollection endpoint', results)
+        res.status(200).send(results)
+    })
+    .catch(err=>console.log(err, ' see selectCollection server endpoint'))
+
+})
 
 
 var port=3001

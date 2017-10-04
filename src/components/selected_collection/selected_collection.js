@@ -32,8 +32,8 @@ class SelectedCollection extends Component{
                                      }
         */
              return(
-            <div className='selectedCollectionArea'>
-                 
+            <div className='selectedCollection'>
+                 SelectedCollectionArea
                  
             </div>
         )

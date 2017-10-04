@@ -5,6 +5,7 @@ const NEW_USER = 'NEW_USER';
 const LOGIN_USER = 'LOGIN_USER';
 const CREATE_COLLECTION = 'CREATE_COLLECTION';
 const GET_COLLECTION ='GET_COLLECTION';
+const COLLECTION_SELECTED = 'COLLECTION_SELECTED';
 
 
 
@@ -15,17 +16,22 @@ var initialState=
  
     username: '',
     userId: '',
-    collections: []
-   // savedVideos : data
+    collections: [],
+    selectedVideo:'',
+    selectedCollection: []
+
 }
 
 
 //ACTION CRETORS, prepare them to be dispatched to reducer, but changes will happen in server via axios before action is passed to reducer to alter redux state
-export function saveVideo(id,collection,videoId,description){
+export function saveVideo(id,collectionId,videoId,description){
     return {
         type: SAVE_VIDEO,
-        payload: axios.post(`/api/addVideoToCollection/${id}/${collection}/${videoId}/${description}`)
-    .then((res)=>res.data)
+        payload: axios.post(`/api/addVideoToCollection/`,{videoId:videoId, collectionId:collectionId, description:description})
+    .then((res)=>{
+  
+            return res.data;
+})
     .catch(err=>console.log(err,' error from SaveVideo action creator axios request'))
     }
    
@@ -36,7 +42,7 @@ export function newUser(newEmail,newUsername,newPassword){
         type: NEW_USER,
         payload: axios.post(`/api/newUser`,{email:newEmail,username:newUsername,password:newPassword})
         .then((res)=>{
-            console.log(res,"axios new User data returned")
+           
             return res.data;
         })
         .catch(err=>console.log(err,' error from newUser action creator axios request'))
@@ -50,7 +56,7 @@ export function loginUser(email,password){
         type: LOGIN_USER,
         payload: axios.post(`/api/login`,{emailTryingToLogin: email, passwordTryingToLogin: password})
         .then((res)=>{
-            console.log(res.data, 'this is what loginUser axios function returned')
+  
             return res.data;
         })
         .catch(err=>console.log(err, 'error from loginUser axios request'))
@@ -63,7 +69,7 @@ export function getCollections(userId){
         type: GET_COLLECTION,
         payload: axios.post(`/api/getCollections/`,{id:userId})
         .then((res)=>{
-            console.log(res.data, 'this is what getCollections axios function returned')
+  
             return res.data
         })
         .catch(err=>console.log(err, 'error from getCollections axios request'))
@@ -78,11 +84,24 @@ return{
     type: CREATE_COLLECTION,
     payload: axios.post(`/api/newCollection`,{userId:userId, newCollection:collectionName})
     .then((res)=>{
-        console.log(res.data, 'this is what createCollection axios function returned')
+  
         return res.data
     })
     .catch(err=>console.log(err, 'error from createCollection axios request'))
 }
+}
+
+export function selectCollection(collectionId){
+    console.log(collectionId, ' this is collectionId selectCollection action creator takes in')
+    return {
+        type: COLLECTION_SELECTED,
+        action: axios.get(`/api/selectCollection/${collectionId}`)
+        .then((res)=>{
+            console.log(res.data, 'this is what selecCollection axios call returned')
+            return res.data
+        })
+        .catch(err=>console.log(err,' error from selectCollection axios request'))
+    }
 }
 
 
@@ -103,29 +122,30 @@ export default function mainReducer(state=initialState,action){
    
     switch(action.type){
         case SAVE_VIDEO +  '_FULFILLED' :
+            return console.log('savedVideo reducer case took in ', action.payload);
             
-             var newObject= action.payload
-            var newCollection=[...state.savedVideos,newObject];
+         case NEW_USER + '_FULFILLED' :
             
-            return Object.assign({},state,{savedVideos:newCollection});
-
-        case NEW_USER + '_FULFILLED' :
-            console.log('new user reducer case ran',action)
             return Object.assign({},state,{username: action.payload.username, userId:action.payload.id});
 
         case LOGIN_USER + '_FULFILLED':
-            console.log('loginuser reducer case ran ', action);
+            
             return Object.assign({},state,{username: action.payload.username,userId:action.payload.id});
 
         case GET_COLLECTION + '_FULFILLED':
-            console.log('get collection reducer case ran', action.payload);
+            
             return Object.assign({},state,{collections: action.payload});
             
 
         case CREATE_COLLECTION + '_FULFILLED':
-            console.log('create collection reducer case ran', action.payload);
+            
             var newCollectionsArray = [...state.collections, action.payload];
             return Object.assign({},state,{collections : newCollectionsArray});
+
+        case COLLECTION_SELECTED + '_FULFILLED':
+        console.log('collectionSelected reducer ran', action.payload);
+        return (Object.assign({},this.state,{selectedCollection: action.payload}));
+   
 
           default:
         return state;

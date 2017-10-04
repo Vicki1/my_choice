@@ -1,21 +1,17 @@
+
+
+
 .App {
   text-align: center;
+  background: rgb(16, 231, 220);
+  color: white;
+  text-shadow: 1px 1px rgb(27, 156, 229);
+  font-size:20px;
 }
 
 .App-logo {
   animation: App-logo-spin infinite 20s linear;
   height: 80px;
-}
-
-.App-header {
-  background-color: #222;
-  height: 150px;
-  padding: 20px;
-  color: white;
-}
-
-.App-intro {
-  font-size: large;
 }
 
 @keyframes App-logo-spin {
@@ -25,19 +21,80 @@
 
 
 
-.input{
-  background: lightgrey;
+
+
+
+
+.selectedCollectionArea{
+  height: 400px;
+
 }
 
-.youTubeSearchArea{
-background: blue;
+.topPart{
+  background: rgb(27, 156, 229);
+  height: 50px;
+  width: 100%;
+}
+.user{
+  float: left;
+ margin: 10px;
+}
+
+.collectionsList{
+float: right;
 
 }
 
-.selectedCollectionArea{
-  background:green;
-  height: 200px;
+
+
+.collectionsDropdownChoices{
+border-radius: 10px;
+}
+.collectionsList input {
+ border-radius: 10px;
+ border:none;
+ box-shadow:1px 1px 1px rgb(27, 156, 229);
 }
 
 
+.collectionsDropdown{
+  float:right;
+ border-radius: 20px;
+  background:rgb(247, 158, 2);
 
+}
+.selectedCollection{
+  margin-top: 100px;
+}
+
+
+.signUpArea input{
+border-radius: 10px;
+display: flex;
+margin: auto;
+}
+
+.signUpArea button{
+background:rgb(247, 158, 2);
+border-radius: 15px;
+border: none;
+box-shadow:1px 1px 1px rgb(27, 156, 229);
+color:white;
+text-shadow: 1px 1px rgb(27, 156, 229);
+}
+
+
+.loginArea input{
+border-radius: 10px;
+display: flex;
+margin: auto;
+}
+
+.loginArea button{
+background:rgb(247, 158, 2);
+border-radius: 15px;
+border: none;
+box-shadow:1px 1px 1px rgb(27, 156, 229);
+color:white;
+text-shadow: 1px 1px rgb(27, 156, 229);
+}

@@ -21,7 +21,7 @@ class Login extends Component{
     render(){
    
         return(
-            <div className='signUpArea input'>
+            <div className='loginArea'>
            
                  
                 <h2>Login</h2>

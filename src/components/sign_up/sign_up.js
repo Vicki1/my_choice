@@ -19,19 +19,19 @@ class SignUp extends Component{
 
 
     render(){
-     console.log(this.state);
+   
         return(
-            <div className='signUpArea input'>
+            <div className='signUpArea'>
            
                  
                 <h2>Sign Up</h2>
-                <span>email:</span><input className='newEmail' onChange={(event)=>this.setState(Object.assign({},this.state,{newEmail:event.target.value}))}></input>
+                <span className="signUpInput">email:</span><input className='newEmail' onChange={(event)=>this.setState(Object.assign({},this.state,{newEmail:event.target.value}))}></input>
                 <br/>
                 
-                <span>username:</span><input className='newPassword' onChange={(event)=>this.setState(Object.assign({},this.state,{newUsername:event.target.value}))}></input>
+                <span className="signUpInput">username:</span><input className='newPassword' onChange={(event)=>this.setState(Object.assign({},this.state,{newUsername:event.target.value}))}></input>
                 <br/>
                 
-                <span>password:</span><input className='newPassword' type='password' onChange={(event)=>this.setState(Object.assign({},this.state,{newPassword:event.target.value}))}></input>
+                <span className="signUpInput">password:</span><input className='newPassword' type='password' onChange={(event)=>this.setState(Object.assign({},this.state,{newPassword:event.target.value}))}></input>
                 <br/>
                 
                 <button onClick={()=>this.props.newUser(this.state.newEmail,this.state.newUsername,this.state.newPassword)}>Sign Up</button>

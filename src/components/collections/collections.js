@@ -1,7 +1,8 @@
 import React,{Component} from 'react';
 import {connect} from 'react-redux';
-import {getCollections, createCollection} from '../../redux/main_reducer';
+import {getCollections, createCollection, selectCollection} from '../../redux/main_reducer';
 import {DropdownButton} from 'react-bootstrap';
+
 
 
 class Collections extends Component{
@@ -10,25 +11,36 @@ class Collections extends Component{
 
         this.state={
             newCollection: ''
+           
         }
  
     }
 
 
     render(){
-        
-        console.log('this is how collections is seen in collection components', this.props.collections)
-        const collections=this.props.collections
-        const collectionsList=collections.map((collection,i)=><button key={collection.id}>{collection.collection_name}</button>) 
+        const buttonStyle={
+            "background":"rgb(247, 158, 2)",
+            "border-radius": "15px",
+            "border": "none",
+            "box-shadow":" 1px 1px 1px rgb(27, 156, 229)",
+            "color":"white",
+            "text-shadow":" 1px 1px rgb(27, 156, 229)"
+          
+        }
+    
+       const collections=this.props.collections;
+        const collectionsList=collections.map((collection,i)=><button className="collectionsDropdownChoices" onClick={()=>this.props.selectCollection(collection.id)} key={collection.id}>{collection.collection_name}</button>) 
         return(
            
             <div className="collectionsList">
-                <DropdownButton onClick={()=>this.props.getCollections(this.props.userId)} className='modal-container' title="collections" id={`id`}>
+                <DropdownButton className='collectionsDropdown' style={buttonStyle} onClick={()=>this.props.getCollections(this.props.userId)} className='modal-container' title="collections" id={`id`}>
+                            <button>New Collection</button>
                             {collectionsList}
+                            
                     </DropdownButton>
                     <br/>
                
-                <span>New Collection: </span><input onChange={(event)=>this.setState(Object.assign({},this.state,{newCollection:event.target.value}))}/><button onClick={()=>this.props.createCollection(this.props.userId,this.state.newCollection)}></button>
+                <input placeholder="new collection" onChange={(event)=>this.setState(Object.assign({},this.state,{newCollection:event.target.value}))}/><button style={buttonStyle} onClick={()=>this.props.createCollection(this.props.userId,this.state.newCollection)}>create</button>
             </div>
         )
     }
@@ -44,4 +56,4 @@ function mapStateToProps(state){
     }
 }
 
-export default connect(mapStateToProps,{getCollections,createCollection})(Collections);
+export default connect(mapStateToProps,{getCollections,createCollection,selectCollection})(Collections);
