@@ -39,8 +39,6 @@ videoSearch(term){
 
     return (
       <div className="youTubeSearchArea">
-       Search YouTube
-       <br/>
        <SearchBar searchForTerm={videoSearch}/>
        {this.state.videos}
        

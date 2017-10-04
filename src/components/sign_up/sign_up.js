@@ -23,8 +23,8 @@ class SignUp extends Component{
         return(
             <div className='signUpArea'>
            
-                 
-                <h2>Sign Up</h2>
+                
+                <h3>Sign Up</h3>
                 <span className="signUpInput">email:</span><input className='newEmail' onChange={(event)=>this.setState(Object.assign({},this.state,{newEmail:event.target.value}))}></input>
                 <br/>
                 

@@ -6,6 +6,7 @@ const LOGIN_USER = 'LOGIN_USER';
 const CREATE_COLLECTION = 'CREATE_COLLECTION';
 const GET_COLLECTION ='GET_COLLECTION';
 const COLLECTION_SELECTED = 'COLLECTION_SELECTED';
+const USER_ALREADY_LOGGED_IN= 'USER_ALREADY_LOGGED_IN';
 
 
 
@@ -104,6 +105,16 @@ export function selectCollection(collectionId){
     }
 }
 
+export function putUserOnState(id,username){
+    console.log('put user Action: ',id,username)
+return{
+    type:USER_ALREADY_LOGGED_IN,
+    payload: {
+        userId: id,
+        username: username
+    }
+}
+}
 
 /*var initialState={
     savedVideos : [
@@ -131,6 +142,10 @@ export default function mainReducer(state=initialState,action){
         case LOGIN_USER + '_FULFILLED':
             
             return Object.assign({},state,{username: action.payload.username,userId:action.payload.id});
+
+        case USER_ALREADY_LOGGED_IN :
+            console.log(action.payload, 'give to cookie whatever reducer')
+            return Object.assign({},state,{username: action.payload.username, userId:action.payload.userId})
 
         case GET_COLLECTION + '_FULFILLED':
             

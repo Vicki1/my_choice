@@ -8,6 +8,8 @@ const path=require('path');
 const massive=require('massive');
 const session=require('express-session');
 
+var createHistory = require('history').createBrowserHistory
+
 
 var app = express();
 
@@ -15,8 +17,17 @@ var app = express();
 
 app.use(express.static(path.join(__dirname,'public')));
 app.use(bodyParser.json());
-app.use(session({secret: 'hi',
-                saveUninitialized: false}))
+
+app.use(session({secret: 'thislasjdf;lajdf;ajsd;',
+                
+                cookie: {   name: "myCookie",
+                            maxAge: 2628000000 },
+                saveUninitialized:true,
+               
+        
+    }));
+
+                
 app.use(cors());
 
 //MASSIVE DB SETUP
@@ -27,7 +38,7 @@ massive({connectionString
 //^ this allows us to to db.function whatever
  
     db.createUsersTable().then(response=>{
-        console.log(response,'users table deleted')
+        console.log(response,'users table created')
     }).catch(err=>console.log(err))
 
         
@@ -42,14 +53,32 @@ massive({connectionString
                  
             
 })
+/*
+//STARTED TO TRY THE HISTORY STUFF
+  const history= createHistory();
 
-    
+//get current location
+  const location = history.location  
 
+//Listen from changes to the current location.
+const unlisten=history.listen((location,action)=>{
+    //location is an object like window.location
+    console.log(action,location.pathname, location.state)
+})
+//use push, replace,and go to navigate around.
+history.push('/home',{some: 'state'})
+// to stop listening, call the function return from listen();
 
+unlisten();
+ //END OF TRYING THE HISTORY STUFF;
+ */
 
 // //Endpoints for MyChoice
+
+
+
 app.get("/test", (req,res)=>{
-console.log('this is working')
+console.log('this is working ',req.session)
 res.status(200).send('it worked')
 })
 // app.post(`api/newUser/:newEmail/:newUsername/:newPassword`, (req,res)=>{
@@ -64,12 +93,35 @@ app.post(`/api/newUser`, (req,res)=>{
     .catch(err=>console.log(err,' could not add new user see server endpoint'))
 })
 
+//CHECK THE USER'S COOKIE
+app.get(`/api/isUserLoggedIn`,function(req,res){
+    let db= req.app.get('db')
+    console.log(req.session)
+    if(req.session.myChoiceUserId){
+        db.loginWithCookie(req.session.myChoiceUserId)
+            .then((results)=>{
+                console.log(results)
+                return res.status(200).send(results[0])
+
+            })
+            .catch((err)=>{
+                console.log(err, 'error from /api/isUserLoggedIn cookie')
+                return res.status(401).send(err, "database error, cookie endpoint")
+            })
+    } else{
+        return res.status(200).send(false)
+    }
+})
+
+
 app.post(`/api/login`, (req,res)=>{
     let db= req.app.get('db')
-  console.log(req.body)
+  
+  console.log(req.session)
     db.checkLoginInfo([req.body.emailTryingToLogin,req.body.passwordTryingToLogin])
     .then(results=>{
         console.log('login results',results[0])
+        req.session.myChoiceUserId=results[0].id
         res.status(200).send(results[0])
     
 })

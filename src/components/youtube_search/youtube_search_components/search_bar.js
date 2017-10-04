@@ -15,7 +15,7 @@ export default class SeachBar extends Component{
       
         return(
             
-            <input className='input' value={this.state.term} onChange={event=>this.changeSearchTerm(event.target.value)}/>
+            <input className='youtubeSearchInput' placeholder="search YouTube ..." value={this.state.term} onChange={event=>this.changeSearchTerm(event.target.value)}/>
           
         )
     }

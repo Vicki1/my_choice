@@ -19,13 +19,10 @@ class Collections extends Component{
 
     render(){
         const buttonStyle={
-            "background":"rgb(247, 158, 2)",
-            "border-radius": "15px",
-            "border": "none",
-            "box-shadow":" 1px 1px 1px rgb(27, 156, 229)",
             "color":"white",
-            "text-shadow":" 1px 1px rgb(27, 156, 229)"
-          
+            "background": "red",
+            "borderRadius": "20px"
+            
         }
     
        const collections=this.props.collections;
@@ -33,14 +30,14 @@ class Collections extends Component{
         return(
            
             <div className="collectionsList">
-                <DropdownButton className='collectionsDropdown' style={buttonStyle} onClick={()=>this.props.getCollections(this.props.userId)} className='modal-container' title="collections" id={`id`}>
-                            <button>New Collection</button>
+                <DropdownButton id='collectionsDropdown'  style={buttonStyle} onClick={()=>this.props.getCollections(this.props.userId)} className='modal-container' title="My collections" id={`id`}>
+                            
                             {collectionsList}
                             
                     </DropdownButton>
                     <br/>
                
-                <input placeholder="new collection" onChange={(event)=>this.setState(Object.assign({},this.state,{newCollection:event.target.value}))}/><button style={buttonStyle} onClick={()=>this.props.createCollection(this.props.userId,this.state.newCollection)}>create</button>
+                <button id="createNewCollectionButton" onClick={()=>this.props.createCollection(this.props.userId,this.state.newCollection)}>create</button><input className="newCollectionName" placeholder="new collection name ..." onChange={(event)=>this.setState(Object.assign({},this.state,{newCollection:event.target.value}))}/>
             </div>
         )
     }

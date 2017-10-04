@@ -24,7 +24,7 @@ class Login extends Component{
             <div className='loginArea'>
            
                  
-                <h2>Login</h2>
+                <h3>Login</h3>
                
                 <span>email:</span><input className='newEmail' onChange={(event)=>this.setState(Object.assign({},this.state,{email:event.target.value}))}></input>
                 <br/>
