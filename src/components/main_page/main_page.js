@@ -8,9 +8,11 @@ export default class MainPage extends Component{
         super(props)
 
             this.state={
-
+                    loggedIn: false,
+                    showLoginSignUpButton: false
             }
     }
+
 
     render(){
         return(

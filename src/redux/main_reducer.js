@@ -7,6 +7,7 @@ const CREATE_COLLECTION = 'CREATE_COLLECTION';
 const GET_COLLECTION ='GET_COLLECTION';
 const COLLECTION_SELECTED = 'COLLECTION_SELECTED';
 const USER_ALREADY_LOGGED_IN= 'USER_ALREADY_LOGGED_IN';
+const DELETE_COLLECTION= 'DELETE_COLLECTION';
 
 
 
@@ -92,6 +93,18 @@ return{
 }
 }
 
+export function deleteCollection(collectionId,userId ){
+return{
+    type:  GET_COLLECTION,
+    payload: axios.delete(`/api/deleteCollection/${userId}/${collectionId}`,)
+    .then ((res)=>{
+        console.log(res.data)
+        return res.data
+    })
+      .catch(err=>console.log(err, 'error from deleteCollection axios request'))
+}
+}
+
 export function selectCollection(collectionId){
     console.log(collectionId, ' this is collectionId selectCollection action creator takes in')
     return {
@@ -114,6 +127,20 @@ return{
         username: username
     }
 }
+}
+
+//DELETE VIDEO WITHIN DB, THEN GET NEW COLLECTION WITHOUT DELETED VIDEO AND SET IT TO SELECTED COLLECTION IN REDUX
+export function deleteVideo(id, collectionId){
+   return{
+       type: COLLECTION_SELECTED,
+       payload: axios.delete(`/api/deleteVideo/${id}/${collectionId}`)
+        .then((res)=>{
+            console.log(res.data, 'this is what selectCollection axios call returned')
+            return res.data
+        })
+        .catch(err=>console.log(err,' error from selectCollection axios request'))
+   }
+    
 }
 
 /*var initialState={

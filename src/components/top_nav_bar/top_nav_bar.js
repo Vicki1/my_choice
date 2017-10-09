@@ -40,11 +40,11 @@ axios.get(`/api/isUserLoggedIn`)
 
 render(){
     console.log(this.props)
-    const usr = this.props.state.username;
+    
     return(
         <div className="topNavBar">
-            <span className="username">MyChoice</span>
-           
+            <span className="myChoice">MyChoice</span>
+          
         
         </div>
     )

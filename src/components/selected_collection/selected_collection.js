@@ -4,23 +4,38 @@ import React,{Component} from "react";
 //import Carousel from 'react-responsive-carousel'
 import Iframe from 'react-iframe';
 import {connect} from 'react-redux'; 
+import {deleteVideo} from '../../redux/main_reducer.js';
+
 
 class SelectedCollection extends Component{
     constructor(props){
         super(props)
 
         this.state={
-            selectedCollectionArray:[]
+            selectedCollection: props.selectedCollection
         }
     }
 
     render(){
        const selectedCollection=this.props.selectedCollection;
-       const selectedCollectionDisplay=selectedCollection.map((video,i)=><Iframe className="embed-responsive-item" url={`https://www.youtube.com/embed/${video.video_id}`}   width="400px"
+       const selectedCollectionDisplay=selectedCollection.map((video,i)=><div key={i}><Iframe className="embed-responsive-item" url={`https://www.youtube.com/embed/${video.video_id}`}   width="400px"
                     height="150px"
                     display="initial"
                     position="relative"
-                    allowFullScreen/>) 
+                    allowFullScreen/>
+                    <br/>
+                    <div className="underVideo">
+                        <div>
+                            <span className="underVideoDescription">{video.description}</span>
+                        </div>
+                        <div>
+                            <button className="deleteVideoButton" onClick={()=>this.props.deleteVideo(video.id,video.collection_id) }>Delete</button>
+                        </div>
+                   </div>
+                   </div>
+                   
+                  
+       )
         /*var savedVideosDisplay= function(savedVideos){
                                 console.log(savedVideos)
                                 if(savedVideos){
@@ -52,4 +67,4 @@ function mapStateToProps(state){
     }
 }
 
-export default connect(mapStateToProps)(SelectedCollection);
+export default connect(mapStateToProps,{deleteVideo})(SelectedCollection);

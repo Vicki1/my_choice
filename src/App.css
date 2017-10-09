@@ -2,31 +2,23 @@
   border-bottom: 5px solid lightgrey;
   padding: 10px;
   margin-bottom: 10px; }
-  .topNavBar .username {
+  .topNavBar .myChoice {
     font-size: 20px;
     font-family: 'Anton', sans-serif; }
 
-.loginArea {
-  text-align: center; }
-  .loginArea input {
-    border-radius: 10px;
-    display: flex;
-    margin: auto; }
-  .loginArea button {
-    color: white;
-    background: red;
-    border-radius: 20px; }
-
-.signUpArea {
-  text-align: center; }
-  .signUpArea input {
-    border-radius: 10px;
-    display: flex;
-    margin: auto; }
-  .signUpArea button {
-    color: white;
-    background: red;
-    border-radius: 20px; }
+.landingArea {
+  margin: 0 auto; }
+  .landingArea div {
+    margin: 50px;
+    text-align: center; }
+    .landingArea div input {
+      border-radius: 10px;
+      display: flex;
+      margin: 0 auto; }
+    .landingArea div button {
+      color: white;
+      background: red;
+      border-radius: 20px; }
 
 .collectionsList #createNewCollectionButton {
   margin: 10px;
@@ -40,8 +32,36 @@
 .collectionsList .SelectedCollectionArea {
   background: black; }
 
+.selectedCollection {
+  width: 100%;
+  display: flex;
+  flex-wrap: wrap; }
+  .selectedCollection .underVideo {
+    width: 400px;
+    display: flex;
+    justify-content: space-between;
+    position: relative;
+    top: -5px;
+    border-bottom: 1px solid lightgrey;
+    border-right: 1px solid lightgrey;
+    border-left: 1px solid lightgrey; }
+    .selectedCollection .underVideo .underVideoDescription {
+      margin-left: 10px; }
+    .selectedCollection .underVideo .deleteVideoButton {
+      margin: 2px;
+      color: white;
+      background: red;
+      border-radius: 20px; }
+
 .youtubeSearchInput {
   border: 1px solid lightgrey; }
 
-.youtTubeVideoDisplay {
-  display: flex; }
+.youTubeSearchArea {
+  width: 100%;
+  display: flex;
+  flex-wrap: wrap; }
+
+.youtubeSearchInput {
+  width: 250px;
+  height: 30px;
+  margin-bottom: 25px; }

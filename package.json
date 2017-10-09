@@ -53,6 +53,7 @@
     "react-redux-oauth2": "^0.5.6",
     "react-responsive-carousel": "^3.1.27",
     "react-router-dom": "^4.2.2",
+    "react-router-link": "^2.0.2",
     "redux": "^3.7.2",
     "redux-promise-middleware": "^4.4.1",
     "request": "^2.82.0",

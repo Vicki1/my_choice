@@ -153,6 +153,22 @@ app.post(`/api/newCollection`, (req,res)=>{
     .catch(err=>{console.log(err, 'see newCollection server endpoint')})
 })
 
+app.delete(`/api/deleteCollection/:id/:collectionId`, (req,res)=>{
+    let db=req.app.get('db')
+         console.log(req.params, 'this is what deleteCollection endpoint takes in')
+         db.deleteCollection([req.params.collectionId])
+         .then(db.getCollections(req.params.id)
+                .then(results=>{
+                console.log('getCollection server results from deleteCollectiojn endpoint',results)
+                res.status(200).send(results)
+    
+            })
+                .catch(err=>console.log(err, 'see deleteCollection endpoint, and its callback for getCollections'))
+            )
+        
+        .catch(err=>{console.log(err, 'see deleteCollection server endpoint')})
+})
+
 
 app.post(`/api/addVideoToCollection/`, (req,res)=>{
      let db= req.app.get('db')
@@ -178,6 +194,27 @@ app.get('/api/selectCollection/:collectionId', (req,res)=>{
 
 })
 
+app.delete(`/api/deleteVideo/:id/:collectionId`, (req,res)=>{
+  let db= req.app.get('db')
+    console.log(req.params)
+  db.deleteVideo([req.params.id])
+  .then(()=>{
+            console.log('db.deleteVideo ran',req.params.collectionId)
+        db.selectCollection([req.params.collectionId])
+        .then((results)=>{
+            console.log('new array after video delete',results)
+                res.status(200).send(results)
+
+        })
+        
+        
+        .catch(err=>console.log(err, 'see deleteVideo endpoint'))
+  
+
+  }
+  )
+  .catch((err)=>console.log(err, `see deleteVideo endopoint`))
+})
 
 var port=3001
 app.listen(port,function(){

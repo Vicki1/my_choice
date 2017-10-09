@@ -38,11 +38,14 @@ videoSearch(term){
     const videoSearch=_.debounce((term)=>{this.videoSearch(term)},300);
 
     return (
+      <div>
+        <SearchBar searchForTerm={videoSearch}/>
       <div className="youTubeSearchArea">
-       <SearchBar searchForTerm={videoSearch}/>
+       
        {this.state.videos}
        
        
+      </div>
       </div>
     );
   }
