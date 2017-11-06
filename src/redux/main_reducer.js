@@ -1,13 +1,13 @@
 import axios from 'axios';
 //import {SAVE_VIDEO} from './actions.js'
 const SAVE_VIDEO = 'SAVE_VIDEO';
-const NEW_USER = 'NEW_USER';
+//const NEW_USER = 'NEW_USER';
 const LOGIN_USER = 'LOGIN_USER';
 const CREATE_COLLECTION = 'CREATE_COLLECTION';
 const GET_COLLECTION ='GET_COLLECTION';
 const COLLECTION_SELECTED = 'COLLECTION_SELECTED';
 const USER_ALREADY_LOGGED_IN= 'USER_ALREADY_LOGGED_IN';
-const DELETE_COLLECTION= 'DELETE_COLLECTION';
+//const DELETE_COLLECTION= 'DELETE_COLLECTION';
 
 
 
@@ -39,7 +39,7 @@ export function saveVideo(id,collectionId,videoId,description){
    
 }
 
-export function newUser(newEmail,newUsername,newPassword){
+/*export function newUser(newEmail,newUsername,newPassword){
     return {
         type: NEW_USER,
         payload: axios.post(`/api/newUser`,{email:newEmail,username:newUsername,password:newPassword})
@@ -63,13 +63,28 @@ export function loginUser(email,password){
         })
         .catch(err=>console.log(err, 'error from loginUser axios request'))
     }
+}*/
+
+export function getAuth0User(){
+    console.log("loginwithAuth0 fired")
+    return{
+        type: LOGIN_USER,
+        payload: axios.get(`/api/login`)
+        .then((res)=> {
+            console.log(res.data)
+            return res.data
+        })
+        .catch((err)=>console.log(err, 'error from loginWithAuth0 in main_reducer.js'))
+    
+    }
+        
 }
 
 
 export function getCollections(userId){
     return {
         type: GET_COLLECTION,
-        payload: axios.post(`/api/getCollections/`,{id:userId})
+        payload: axios.post(`/api/getCollections/`,{userId})
         .then((res)=>{
   
             return res.data
@@ -118,7 +133,7 @@ export function selectCollection(collectionId){
     }
 }
 
-export function putUserOnState(id,username){
+/*export function putUserOnState(id,username){
     console.log('put user Action: ',id,username)
 return{
     type:USER_ALREADY_LOGGED_IN,
@@ -127,7 +142,7 @@ return{
         username: username
     }
 }
-}
+}*/
 
 //DELETE VIDEO WITHIN DB, THEN GET NEW COLLECTION WITHOUT DELETED VIDEO AND SET IT TO SELECTED COLLECTION IN REDUX
 export function deleteVideo(id, collectionId){
@@ -166,13 +181,10 @@ export default function mainReducer(state=initialState,action){
         case SAVE_VIDEO +  '_FULFILLED' :
             return Object.assign({},state);
             
-         case NEW_USER + '_FULFILLED' :
-            
-            return Object.assign({},state,{username: action.payload.username, userId:action.payload.id});
-
+         
         case LOGIN_USER + '_FULFILLED':
-            
-            return Object.assign({},state,{username: action.payload.username,userId:action.payload.id});
+            console.log(action.payload, `this is what LOGIN_USER reducer fn takes in`);
+            return Object.assign({},state,{userId:action.payload.id,username: action.payload.display_name});
 
         case USER_ALREADY_LOGGED_IN :
             console.log(action.payload, 'give to cookie whatever reducer')

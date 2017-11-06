@@ -1,9 +1,11 @@
 import React, {Component} from 'react';
 import Collections from '../collections/collections';
 import SelectedCollection from '../selected_collection/selected_collection';
-import YouTubeSearch from '../youtube_search/youtube_search'
+import YouTubeSearch from '../youtube_search/youtube_search';
+import {getAuth0User} from '../../redux/main_reducer';
+import {connect} from 'react-redux';
 
-export default class MainPage extends Component{
+class MainPage extends Component{
     constructor(props){
         super(props)
 
@@ -14,9 +16,14 @@ export default class MainPage extends Component{
     }
 
 
+componentDidMount(){
+
+}
+
     render(){
         return(
             <div className="mainPageDiv">
+                <a href="http://localhost:3001/auth"><button>Login</button></a>
                 <Collections/>
                 <SelectedCollection/>
                 <h2>Search YouTube Videos</h2>
@@ -32,6 +39,15 @@ export default class MainPage extends Component{
             </div>
               <SelectedCollection/>
               <YouTubeSearch/>*/
+function mapStateToProps(state){
+   
+    return{
+        state: state
+    }
+}
+
+export default connect(mapStateToProps,{getAuth0User})(MainPage);
+
 
 
 

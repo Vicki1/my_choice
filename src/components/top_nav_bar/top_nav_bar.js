@@ -1,8 +1,8 @@
 import React,{Component} from 'react';
 import {connect} from 'react-redux';
-import {putUserOnState} from "../../redux/main_reducer";
+//import {putUserOnState} from "../../redux/main_reducer";
 
-import axios from "axios";
+//import axios from "axios";
 
 class TopNavBar extends Component{
     constructor(props){
@@ -15,7 +15,7 @@ class TopNavBar extends Component{
            
     }
 
-componentDidMount(){
+/*componentDidMount(){
         setTimeout(()=>{
 axios.get(`/api/isUserLoggedIn`)
         .then((res)=>{
@@ -34,7 +34,7 @@ axios.get(`/api/isUserLoggedIn`)
         .catch((err)=>console.log(err, 'isUserAlreadyLoggedIn axios call error'))
         },100)
         
-    }
+    }*/
 
     
 
@@ -56,8 +56,8 @@ render(){
 function mapStateToProps(state){
    
     return{
-        state
+        state : state
     }
 }
 
-export default connect(mapStateToProps,{putUserOnState})(TopNavBar);
+export default connect(mapStateToProps)(TopNavBar);

@@ -1,2 +1,2 @@
-SELECT username,id FROM users
+SELECT id,display_name FROM users
 WHERE id=$1;

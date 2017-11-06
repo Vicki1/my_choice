@@ -7,35 +7,98 @@ const connectionString = herokuURI;
 const path=require('path');
 const massive=require('massive');
 const session=require('express-session');
-
+const passport = require('passport');
+const Auth0Strategy = require('passport-auth0');
 var createHistory = require('history').createBrowserHistory
 
 
-var app = express();
+const app = express();
+
+app.use(bodyParser.json());
+
+app.use(session({secret: con.sessionSecret}))
+app.use(passport.initialize())
+app.use(passport.session())
+
+passport.use(new Auth0Strategy({
+  domain: con.domain,
+  clientID: con.clientID,
+  clientSecret: con.clientSecret,
+  callbackURL: con.callbackURL
+}, function(accessToken, refreshToken, extraParams, profile, done) {
+  
+    // accessToken is the token to call Auth0 API (not needed in the most cases)
+    // extraParams.id_token has the JSON Web Token
+    // profile has all the information from the user
+    //////START
+
+
+
+   app.get('db').getExistingUser([profile.id, profile.display_name])
+ .then(results=>{
+   if(results[0]){
+     app.get('db').createUserByAuth([profile.id,profile.displayName])
+     .then(results=>{
+       console.log('created new Auth User with', results)
+       //res.status(200).send(results[0])
+        })
+     .catch(err=>console.log(`error see Auth0.createUserByAuth function`,err))
+   }else{
+     console.log(`sending existing user info`,results)
+     //res.status(200).send(results[0])
+   }
+ })
+ .catch(err=>console.log(err=>console.log(`error check Auth0.getExistingUser db call`,err)))
+    ///////END*/
+
+ return done(null, profile);
+  
+}));
+
+app.get('/auth', passport.authenticate('auth0'));
+
+//this may or may not be right, try diff /api/login function
+
+
+
+app.get('/auth/callback', passport.authenticate('auth0', {
+  successRedirect: 'http://localhost:3000',
+  failureRedirect: 'http://localhost:3000/loginError'
+}))
+
+passport.serializeUser(function(user, done) {
+
+  done(null, user);
+});
+
+passport.deserializeUser(function(obj, done) {
+  done(null, obj);
+});
+
+app.get('/me', (req, res, next) => {
+  if (!req.user) {
+    return res.status(404).send('User not found');
+  } else {
+    return res.status(200).send(req.user);
+  }
+})
+
+
+/*app.use(session({secret: con.sessionSecret,
+                resave: false,
+                saveUninitialized:true,
+               }));*/
 
 
 
 app.use(express.static(path.join(__dirname,'public')));
-app.use(bodyParser.json());
 
-app.use(session({secret: 'thislasjdf;lajdf;ajsd;',
-                
-                cookie: {   name: "myCookie",
-                            maxAge: 2628000000 },
-                saveUninitialized:true,
-               
-        
-    }));
-
-                
 app.use(cors());
 
-//MASSIVE DB SETUP
-//question???? db names in require and here
+
 massive({connectionString
 }).then(db=>{
-    app.set('db',db) //app is big object express creates for us, we set new variable called db on theat object and give it the info that massive sends back to us once its connected
-//^ this allows us to to db.function whatever
+    app.set('db',db) 
  
     db.createUsersTable().then(response=>{
         console.log(response,'users table created')
@@ -53,79 +116,27 @@ massive({connectionString
                  
             
 })
-/*
-//STARTED TO TRY THE HISTORY STUFF
-  const history= createHistory();
 
-//get current location
-  const location = history.location  
+//////////////////
+// Auth0 stuff ///
+//////////////////
 
-//Listen from changes to the current location.
-const unlisten=history.listen((location,action)=>{
-    //location is an object like window.location
-    console.log(action,location.pathname, location.state)
-})
-//use push, replace,and go to navigate around.
-history.push('/home',{some: 'state'})
-// to stop listening, call the function return from listen();
+app.use(session({secret: ''}))
+app.use(passport.initialize())
 
-unlisten();
- //END OF TRYING THE HISTORY STUFF;
- */
+/////////////////////////
+/// End of Auth0 stuff///
+/////////////////////////
 
-// //Endpoints for MyChoice
+
+
+
 
 
 
 app.get("/test", (req,res)=>{
 console.log('this is working ',req.session)
 res.status(200).send('it worked')
-})
-// app.post(`api/newUser/:newEmail/:newUsername/:newPassword`, (req,res)=>{
-app.post(`/api/newUser`, (req,res)=>{
-    //console.log(req.params.newEmail,req.params.username,req.params.newPassword)
-    let db = req.app.get('db')
- 
-    db.addNewUser([req.body.email,req.body.username,req.body.password])
-    .then(results=>{
-        console.log('new user created',results[0])
-        res.status(200).send(results[0])})
-    .catch(err=>console.log(err,' could not add new user see server endpoint'))
-})
-
-//CHECK THE USER'S COOKIE
-app.get(`/api/isUserLoggedIn`,function(req,res){
-    let db= req.app.get('db')
-    console.log(req.session)
-    if(req.session.myChoiceUserId){
-        db.loginWithCookie(req.session.myChoiceUserId)
-            .then((results)=>{
-                console.log(results)
-                return res.status(200).send(results[0])
-
-            })
-            .catch((err)=>{
-                console.log(err, 'error from /api/isUserLoggedIn cookie')
-                return res.status(401).send(err, "database error, cookie endpoint")
-            })
-    } else{
-        return res.status(200).send(false)
-    }
-})
-
-
-app.post(`/api/login`, (req,res)=>{
-    let db= req.app.get('db')
-  
-  console.log(req.session)
-    db.checkLoginInfo([req.body.emailTryingToLogin,req.body.passwordTryingToLogin])
-    .then(results=>{
-        console.log('login results',results[0])
-        req.session.myChoiceUserId=results[0].id
-        res.status(200).send(results[0])
-    
-})
- .catch(err=>{console.log(err, 'see login server endpoint')})
 })
 
 app.post(`/api/getCollections`, (req,res)=>{
@@ -147,7 +158,7 @@ app.post(`/api/newCollection`, (req,res)=>{
      console.log(req.body, 'this is what createCollection endpoint takes in')
      db.createCollection([req.body.userId,req.body.newCollection])
      .then(results=>{
-         console.log('new collection resulst', results[0])
+         console.log('new collection results', results[0])
          res.status(200).send(results[0])
     })
     .catch(err=>{console.log(err, 'see newCollection server endpoint')})
@@ -216,8 +227,12 @@ app.delete(`/api/deleteVideo/:id/:collectionId`, (req,res)=>{
   .catch((err)=>console.log(err, `see deleteVideo endopoint`))
 })
 
-var port=3001
-app.listen(port,function(){
-    console.log(`app listening on port ${port}`)
+
+app.get('*', (req, res)=>{
+  res.sendFile(path.join(__dirname, '../build/index.html'));
 })
 
+const port=3001
+app.listen(port,function(){
+    console.log(`hi there, app listening on port ${port}`)
+})
