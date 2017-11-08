@@ -9,101 +9,90 @@ const massive=require('massive');
 const session=require('express-session');
 const passport = require('passport');
 const Auth0Strategy = require('passport-auth0');
-var createHistory = require('history').createBrowserHistory
-
+var createHistory = require('history').createBrowserHistory;
+      
 
 const app = express();
 
-app.use(bodyParser.json());
 
-app.use(session({secret: con.sessionSecret}))
+
+
+///////////////////////////
+//////TOPLEVEL MIDDLEWARE///
+////////////////////////////
+
+
+
+app.use(express.static(path.join(__dirname,'public')));
+app.use(session({
+    secret: con.sessionSecret,
+    saveUninitialized: true,
+    resave: false
+  }));
+
+app.use(bodyParser.json());
 app.use(passport.initialize())
 app.use(passport.session())
 
+///////////////////////////////
+//////END TOPLEVEL MIDDLEWARE///
+///////////////////////////////
+
+//////////////////////
+////AUTHENTICATION/////
+///////////////////////
 passport.use(new Auth0Strategy({
   domain: con.domain,
   clientID: con.clientID,
   clientSecret: con.clientSecret,
   callbackURL: con.callbackURL
 }, function(accessToken, refreshToken, extraParams, profile, done) {
-  
+  const db=app.get('db')
     // accessToken is the token to call Auth0 API (not needed in the most cases)
     // extraParams.id_token has the JSON Web Token
     // profile has all the information from the user
     //////START
 
-
-
-   app.get('db').getExistingUser([profile.id, profile.display_name])
- .then(results=>{
-   if(results[0]){
-     app.get('db').createUserByAuth([profile.id,profile.displayName])
-     .then(results=>{
-       console.log('created new Auth User with', results)
-       //res.status(200).send(results[0])
-        })
-     .catch(err=>console.log(`error see Auth0.createUserByAuth function`,err))
+  db.getExistingUser([profile.id, profile.display_name]).then(user=>{
+   if(user.length){
+     return done(null,user[0])
    }else{
-     console.log(`sending existing user info`,results)
-     //res.status(200).send(results[0])
-   }
- })
- .catch(err=>console.log(err=>console.log(`error check Auth0.getExistingUser db call`,err)))
-    ///////END*/
-
- return done(null, profile);
-  
-}));
-
-app.get('/auth', passport.authenticate('auth0'));
-
-//this may or may not be right, try diff /api/login function
-
-
-
-app.get('/auth/callback', passport.authenticate('auth0', {
-  successRedirect: 'http://localhost:3000',
-  failureRedirect: 'http://localhost:3000/loginError'
+       let auth_id=profile.id;
+       let username=profile.displayName ? profile.displayName: "";
+        app.get('db').createUserByAuth([profile.id,profile.displayName])
+     .then(user=>{
+       return done(null,user[0])
+        }).catch(err=>console.log(`see Auth0Strategy catch`,err))
+      }
+    })
 }))
 
-passport.serializeUser(function(user, done) {
 
+passport.serializeUser(function(user, done) {
   done(null, user);
 });
 
-passport.deserializeUser(function(obj, done) {
-  done(null, obj);
-});
-
-app.get('/me', (req, res, next) => {
-  if (!req.user) {
-    return res.status(404).send('User not found');
-  } else {
-    return res.status(200).send(req.user);
-  }
+passport.deserializeUser(function(user, done) {
+      const db=app.get('db')
+      db.findSessionUser(user.auth_id).then(user=>{
+     done(null, user[0]);
+  });
+   
+ 
 })
 
-
-/*app.use(session({secret: con.sessionSecret,
-                resave: false,
-                saveUninitialized:true,
-               }));*/
-
-
-
-app.use(express.static(path.join(__dirname,'public')));
-
-app.use(cors());
-
+///////////////
+///DATABASE////
+///////////////
 
 massive({connectionString
 }).then(db=>{
     app.set('db',db) 
- 
-    db.createUsersTable().then(response=>{
-        console.log(response,'users table created')
-    }).catch(err=>console.log(err))
 
+   
+       db.createUsersTable().then(response=>{
+            console.log(response,'collections table created')
+            }).catch(err=>console.log(err))
         
             db.createCollectionsTable().then(response=>{
             console.log(response,'collections table created')
@@ -115,24 +104,32 @@ massive({connectionString
                }).catch(err=>console.log(err))
                  
             
+}).catch(err=>console.log(err))
+
+
+
+
+//////////////////////
+//ENDPOINTS ///
+/////////////////////
+
+//auth endpoints
+app.get('/auth', passport.authenticate('auth0'));
+app.get('/auth/callback', passport.authenticate('auth0',{
+  successRedirect: 'http://localhost:3000/loggedIn',
+  failureRedirect: 'http://localhost:3000/loginError'
+}));
+app.get('/auth/logout', (req,res)=>{
+  req.logout();
+  res.redirect(302,'http://localhost:3000/logoutError')
 })
 
-//////////////////
-// Auth0 stuff ///
-//////////////////
 
-app.use(session({secret: ''}))
-app.use(passport.initialize())
-
-/////////////////////////
-/// End of Auth0 stuff///
-/////////////////////////
-
-
-
-
-
-
+//source endpoints
+app.get('/api/user', (req,res)=>{
+  console.log(req.user);
+  res.status(200).send(req.user);
+})
 
 app.get("/test", (req,res)=>{
 console.log('this is working ',req.session)
@@ -224,15 +221,18 @@ app.delete(`/api/deleteVideo/:id/:collectionId`, (req,res)=>{
 
   }
   )
-  .catch((err)=>console.log(err, `see deleteVideo endopoint`))
+  .catch(err=>console.log(err, `see deleteVideo endopoint`))
 })
 
 
-app.get('*', (req, res)=>{
-  res.sendFile(path.join(__dirname, '../build/index.html'));
-})
 
+////////////////
+///LISTENING////
+////////////////
 const port=3001
 app.listen(port,function(){
     console.log(`hi there, app listening on port ${port}`)
 })
+
+
+
